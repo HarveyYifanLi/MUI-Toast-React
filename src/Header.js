@@ -10,7 +10,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { createMockFormSubmission } from './service/mockServer';
 
-export default function Header() {
+import { connect } from "react-redux";
+import { obtainFormSubmission } from "./store/actions/formActions";
+
+function Header() {
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar position="static">
@@ -39,3 +42,11 @@ export default function Header() {
     </Box>
   );
 }
+
+function mapStateToProps(state) {
+  return {
+    currentForm: state.currentForm
+  };
+}
+
+export default connect(mapStateToProps, { obtainFormSubmission })(Header);
