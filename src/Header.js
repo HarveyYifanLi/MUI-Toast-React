@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
@@ -8,12 +8,22 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { createMockFormSubmission } from './service/mockServer';
+import { onMessage, createMockFormSubmission } from './service/mockServer';
 
 import { connect } from "react-redux";
-import { obtainFormSubmission } from "./store/actions/formActions";
+import { setCurrentForm } from "./store/actions/formActions";
+import { useDispatch } from 'react-redux';
 
-function Header() {
+function Header(props) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // upon first render, register the callback redux-thunk function (i.e. to dispatch action when called) for when we get a new form submission from the "server"
+    onMessage((formSubmission) => {
+      dispatch(setCurrentForm(formSubmission));
+    });
+  }, []);
+
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar position="static">
@@ -33,7 +43,10 @@ function Header() {
             variant="contained"
             size="small"
             color="secondary"
-            onClick={() => createMockFormSubmission()}
+            onClick={() => {
+              createMockFormSubmission();
+              console.log('props.currentForm:', props.currentForm);
+            }}
           >
             New Submission
           </Button>
@@ -49,4 +62,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { obtainFormSubmission })(Header);
+export default connect(mapStateToProps, {})(Header);

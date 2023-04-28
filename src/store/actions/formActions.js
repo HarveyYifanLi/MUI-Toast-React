@@ -9,7 +9,11 @@ export function setCurrentForm(formSubmission) {
 
 // dispatch action creator to set form submission data in the redux store 
 export function obtainFormSubmission(formSubmission) {
-    return dispatch => {
+    console.log('************* obtainFormSubmission is called!, with formSubmission:', formSubmission);
+    // return dispatch => {
+    //     dispatch(setCurrentForm(formSubmission));
+    // };
+    return (dispatch => {
         dispatch(setCurrentForm(formSubmission));
-    }
+    })();
 }

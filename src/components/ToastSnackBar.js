@@ -1,19 +1,19 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function ToastSnackBar() {
-  const [snackPack, setSnackPack] = React.useState([]);
-  const [open, setOpen] = React.useState(false);
-  const [messageInfo, setMessageInfo] = React.useState(undefined);
+  const [snackPack, setSnackPack] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [messageInfo, setMessageInfo] = useState(undefined);
 
-  const [snackBarLocation, setSnackBarLocation] = React.useState({vertical: "bottom", horizontal: "right"});
+  const [snackBarLocation, setSnackBarLocation] = useState({vertical: "bottom", horizontal: "right"});
 
   const { vertical, horizontal } = snackBarLocation;
 
-  React.useEffect(() => {
+  useEffect(() => {
     console.log(snackPack);
     console.log("messageInfo", messageInfo);
     console.log("open", open);
