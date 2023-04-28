@@ -5,6 +5,6 @@ import App from './App';
 test('renders header text', () => {
   render(<App />);
 
-  const heading  = screen.getByRole('heading', { name: /toast exercise/i});
+  const heading  = screen.getByRole('heading', { name: /toast notification/i});
   expect(heading).toBeInTheDocument();
 });
