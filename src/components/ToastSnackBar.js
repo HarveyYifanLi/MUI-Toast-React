@@ -6,6 +6,8 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { connect } from "react-redux";
 
+import { saveLikedFormSubmission } from "../service/mockServer";
+
 function ToastSnackBar(props) {
   const [open, setOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState(undefined);
@@ -31,6 +33,20 @@ function ToastSnackBar(props) {
     if (reason === "clickaway") {
       return;
     }
+    // reset states
+    setMessageInfo(undefined);
+    setOpen(false);
+  };
+
+  const handleLiked = () => {
+    try {
+        // firstly save/persist the liked formSubmission data to "server" DB
+        // this operation needs to be within a try-catch block due to "server"'s likely failure
+        saveLikedFormSubmission(props.formData);
+    } catch(err) {
+        console.error(err);
+    }
+    // then reset states
     setMessageInfo(undefined);
     setOpen(false);
   };
@@ -45,7 +61,7 @@ function ToastSnackBar(props) {
         message={messageInfo ? messageInfo.message : undefined}
         action={
           <>
-            <Button color="secondary" size="small" onClick={handleClose}>
+            <Button color="secondary" size="small" onClick={handleLiked}>
               Like
             </Button>
             <IconButton
