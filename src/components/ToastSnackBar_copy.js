@@ -7,27 +7,40 @@ import CloseIcon from "@mui/icons-material/Close";
 import { connect } from "react-redux";
 
 function ToastSnackBar(props) {
-  const [open, setOpen] = useState(false);
-  const [messageInfo, setMessageInfo] = useState(undefined);
+  const initPropsData = props.formData.data;
+  const initMessageInfo = initPropsData ? {message: `${initPropsData.firstName} ${initPropsData.lastName} \n ${initPropsData.email}`, key: new Date().getTime()} : undefined;
+
+  const [snackPack, setSnackPack] = useState([]);
+  const [open, setOpen] = useState(props.open);
+  const [messageInfo, setMessageInfo] = useState(initMessageInfo);
 
   const [snackBarLocation, setSnackBarLocation] = useState({vertical: "bottom", horizontal: "right"});
   const { vertical, horizontal } = snackBarLocation;
 
   useEffect(() => {
-    console.log("props.formData.id", props.formData.id);
-    console.log("props.open", props.open);
+    console.log(snackPack);
     console.log("messageInfo", messageInfo);
     console.log("open", open);
-    const propsFormData = props.formData.data;
-    const messageInfoFromProps = propsFormData ? {message: `${propsFormData.firstName} ${propsFormData.lastName} \n ${propsFormData.email}`, key: new Date().getTime()} : undefined;
 
-    if (props.open && propsFormData && !messageInfo && !open) {
-        setMessageInfo(messageInfoFromProps);
-        setOpen(props.open);
+    if (snackPack.length && !messageInfo) {
+      console.log("if is hit !!!");
+      // Set a new snack when we don't have an active one
+      setMessageInfo({ ...snackPack[0] });
+      setSnackPack((prev) => prev.slice(1));
+      setOpen(true);
+    } else if (snackPack.length && messageInfo && open) {
+      console.log("else if is hit ~~~");
+      // Close an active snack when a new one is added
+      setMessageInfo(undefined);
+      setOpen(false);
     }
-  }, [props.formData.id, props.open]);
+  }, [snackPack, messageInfo, open]);
 
-  const handleClose = (reason) => {
+  const handleClick = (message) => () => {
+    setSnackPack((prev) => [...prev, { message, key: new Date().getTime() }]);
+  };
+
+  const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
@@ -37,6 +50,9 @@ function ToastSnackBar(props) {
 
   return (
     <div>
+      <Button onClick={handleClick(JSON.stringify(messageInfo))}>{JSON.stringify(messageInfo)}</Button>
+      <Button onClick={handleClick("Message B")}>Show message B</Button>
+
       <Snackbar
         key={messageInfo ? messageInfo.key : undefined}
         anchorOrigin={{ vertical, horizontal }}
