@@ -1,4 +1,3 @@
-// NOTE: Do not modify this file
 import Chance from 'chance';
 
 const chance = new Chance();

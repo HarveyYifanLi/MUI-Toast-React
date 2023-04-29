@@ -14,15 +14,11 @@ function ToastSnackBar(props) {
 
   const [open, setOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState(undefined);
-
+  // set the location of the Toast Notification to the bottom-right side of the screen
   const [snackBarLocation, setSnackBarLocation] = useState({vertical: "bottom", horizontal: "right"});
   const { vertical, horizontal } = snackBarLocation;
 
   useEffect(() => {
-    console.log("props.formData.id", props.formData.id);
-    console.log("props.open", props.open);
-    console.log("messageInfo", messageInfo);
-    console.log("open", open);
     const propsFormData = props.formData.data;
     const messageInfoFromProps = propsFormData ? {message: `${propsFormData.firstName} ${propsFormData.lastName} \n ${propsFormData.email}`, key: new Date().getTime()} : undefined;
 
