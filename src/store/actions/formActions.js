@@ -7,9 +7,9 @@ export function setCurrentForm(formSubmission) {
     };
 }
 
-export function openToastNotification() {
+export function openToastNotification(openState=true) {
     return {
       type: OPEN_TOAST_NOTIFICATION,
-      open: true,
+      open: openState,
     };
 }

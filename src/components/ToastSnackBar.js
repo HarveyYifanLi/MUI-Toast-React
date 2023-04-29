@@ -4,11 +4,14 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
+import { openToastNotification } from "../store/actions/formActions";
 
 import { saveLikedFormSubmission } from "../service/mockServer";
 
 function ToastSnackBar(props) {
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState(undefined);
 
@@ -38,17 +41,19 @@ function ToastSnackBar(props) {
     setOpen(false);
   };
 
-  const handleLiked = () => {
+  const handleLiked = async () => {
     try {
         // firstly save/persist the liked formSubmission data to "server" DB
-        // this operation needs to be within a try-catch block due to "server"'s likely failure
-        saveLikedFormSubmission(props.formData);
+        // this operation needs to be within a try-catch block due to its async nature and "server"'s likely failure
+        await saveLikedFormSubmission(props.formData);
     } catch(err) {
         console.error(err);
     }
     // then reset states
     setMessageInfo(undefined);
     setOpen(false);
+    // update redux store accordingly
+    dispatch(openToastNotification(false));
   };
 
   return (
