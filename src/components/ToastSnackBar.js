@@ -4,13 +4,17 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function ToastSnackBar() {
+import { connect } from "react-redux";
+
+function ToastSnackBar(props) {
+  const initPropsData = props.formData.data;
+  const initMessageInfo = initPropsData ? {message: `${initPropsData.firstName} ${initPropsData.lastName} \n ${initPropsData.email}`, key: new Date().getTime()} : undefined;
+
   const [snackPack, setSnackPack] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [messageInfo, setMessageInfo] = useState(undefined);
+  const [open, setOpen] = useState(props.open);
+  const [messageInfo, setMessageInfo] = useState(initMessageInfo);
 
   const [snackBarLocation, setSnackBarLocation] = useState({vertical: "bottom", horizontal: "right"});
-
   const { vertical, horizontal } = snackBarLocation;
 
   useEffect(() => {
@@ -46,8 +50,9 @@ export default function ToastSnackBar() {
 
   return (
     <div>
-      <Button onClick={handleClick("Message A")}>Show message A</Button>
+      <Button onClick={handleClick(JSON.stringify(messageInfo))}>{JSON.stringify(messageInfo)}</Button>
       <Button onClick={handleClick("Message B")}>Show message B</Button>
+
       <Snackbar
         key={messageInfo ? messageInfo.key : undefined}
         anchorOrigin={{ vertical, horizontal }}
@@ -73,3 +78,12 @@ export default function ToastSnackBar() {
     </div>
   );
 }
+
+function mapStateToProps(state) {
+    return {
+      formData: state.currentForm.formData,
+      open: state.toastNotification.open,
+    };
+}
+
+export default connect(mapStateToProps, {})(ToastSnackBar);

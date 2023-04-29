@@ -11,7 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { onMessage, createMockFormSubmission } from './service/mockServer';
 
 import { connect } from "react-redux";
-import { setCurrentForm } from "./store/actions/formActions";
+import { setCurrentForm, openToastNotification } from "./store/actions/formActions";
 import { useDispatch } from 'react-redux';
 
 function Header(props) {
@@ -45,7 +45,8 @@ function Header(props) {
             color="secondary"
             onClick={() => {
               createMockFormSubmission();
-              console.log('props.currentForm:', props.currentForm);
+              dispatch(openToastNotification());
+              console.log('props:', props);
             }}
           >
             New Submission
@@ -58,7 +59,8 @@ function Header(props) {
 
 function mapStateToProps(state) {
   return {
-    currentForm: state.currentForm
+    currentForm: state.currentForm,
+    toastNotification: state.toastNotification,
   };
 }
 
